@@ -1,12 +1,19 @@
-# PlayPlanner
+# Dunktomic
+<img
+    style="display: block;
+           margin-left: auto;
+           margin-right: auto;
+           width: 40%;"
+    src="./docs/dunktomic.png"
+    alt="Dunktomic Logo"/>
 
 ## Elevator pitch
 
-"Playplanner" eleva tu experiencia de deporte en España. Nuestra plataforma de “Reservas Eficientes” y el "Match Perfect" facilitan encuentros equilibrados y significativos, promoviendo un disfrute consciente del deporte. Vive tu pasión por el deporte utilizando Playplanner.
+"Dunktomic" eleva tu experiencia de deporte en España. Nuestra plataforma de “Reservas Eficientes” y el "Match Perfect" facilitan encuentros equilibrados y significativos, promoviendo un disfrute consciente del deporte. Vive tu pasión por el deporte utilizando Dunktomic.
 
 ## Requisitos funcionales
 
-Con Playplanner podrás buscar y reservar canchas cercanas a tí, pudiendo ajustar también la fecha y la hora.
+Con Dunktomic podrás buscar y reservar canchas cercanas a tí, pudiendo ajustar también la fecha y la hora.
 
 Podrás gestionar partidos, reservando la pista, invitando a otros jugadores y gestionando confirmaciones de asistencia de los mismos.
 Por otro lado, podrás observar tu desempeño, visualizando tu nivel así como las estadísticas de los partidos.

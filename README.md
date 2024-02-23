@@ -45,6 +45,7 @@ Como apoyo en el diagramado, se ha utilizado [Excalidraw](https://excalidraw.com
 ![Actores del Sistema](./docs/requirements_discipline/system_actors.png)
 
 ### Casos de Uso
+<em>Revisar caso de uso "Show Game". Incluir caso de uso "Filter Game", "Show Games", etc.
 ![Casos de Uso](./docs/requirements_discipline/useCases.png)
 
 ### Análisis de Casos de Uso

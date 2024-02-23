@@ -31,13 +31,13 @@ Los diagramas han sido desarrollados usando [UMLet](https://www.umlet.com/), una
 Como apoyo en el diagramado, se ha utilizado [Excalidraw](https://excalidraw.com), también open-source.
 
 ### Modelo del Dominio
-![Contexto](./docs/requirements_discipline/context.svg)
+![Contexto](./docs/requirements_discipline/context.png)
 
 ### Actores
-![Actores del Sistema](./docs/requirements_discipline/system_actors.svg)
+![Actores del Sistema](./docs/requirements_discipline/system_actors.png)
 
 ### Casos de Uso
-![Casos de Uso](./docs/requirements_discipline/useCases.svg)
+![Casos de Uso](./docs/requirements_discipline/useCases.png)
 
 ### Análisis de Casos de Uso
 TODO.

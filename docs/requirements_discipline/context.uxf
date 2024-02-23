@@ -581,19 +581,6 @@ bg=WHITE</panel_attributes>
     <additional_attributes>110.0;10.0;110.0;40.0;10.0;40.0;10.0;150.0;50.0;150.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>770</x>
-      <y>280</y>
-      <w>640</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m2=1
-bg=WHITE</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0;570.0;40.0;570.0;90.0;620.0;90.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
       <x>650</x>
@@ -617,5 +604,43 @@ bg=WHITE</panel_attributes>
 m2=0..n
 bg=WHITE</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1550</x>
+      <y>350</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Result
+bg=WHITE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>770</x>
+      <y>280</y>
+      <w>800</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m2=1
+bg=WHITE</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;750.0;40.0;750.0;90.0;780.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>770</x>
+      <y>280</y>
+      <w>640</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m2=1
+bg=WHITE</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;570.0;40.0;570.0;90.0;620.0;90.0</additional_attributes>
   </element>
 </diagram>

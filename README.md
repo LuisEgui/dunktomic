@@ -24,6 +24,14 @@ Por otro lado, podrás observar tu desempeño, visualizando tu nivel así como l
 
 Y lo más importante, ¡podrás formar parte de una comunidad de jugadores con los que poder disfrutar de este deporte!
 
+## Requisitos no funcionales
+
+Se desea utilizar el siguiente stack tecnológico:
+- Spring Framework
+- Vue
+- Docker
+- Github Actions
+
 ## Disciplina de Requisitos
 
 Los diagramas han sido desarrollados usando [UMLet](https://www.umlet.com/), una herramienta UML open-source, y se pueden acceder importando los archivos <em>*.uxf</em>.

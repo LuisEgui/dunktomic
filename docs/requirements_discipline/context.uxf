@@ -2,20 +2,6 @@
 <diagram program="umlet" version="15.1">
   <zoom_level>10</zoom_level>
   <element>
-    <id>UMLPackage</id>
-    <coordinates>
-      <x>170</x>
-      <y>270</y>
-      <w>1710</w>
-      <h>700</h>
-    </coordinates>
-    <panel_attributes>Domain Model
---
-bg=white
-layer=-1</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
       <x>380</x>
@@ -761,5 +747,19 @@ bg=WHITE
 group=group-0
 layer=2</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;40.0;570.0;40.0;570.0;90.0;620.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>170</x>
+      <y>260</y>
+      <w>1710</w>
+      <h>720</h>
+    </coordinates>
+    <panel_attributes>Domain Model
+--
+bg=white
+layer=-1</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

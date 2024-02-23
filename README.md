@@ -1,4 +1,5 @@
 # Dunktomic
+<p align="center">
 <img
     style="display: block;
            margin-left: auto;
@@ -6,6 +7,7 @@
            width: 40%;"
     src="./docs/dunktomic.png"
     alt="Dunktomic Logo"/>
+</p>
 
 ## Elevator pitch
 

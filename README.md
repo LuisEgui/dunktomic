@@ -60,15 +60,3 @@ TODO.
 TODO.
 ### Disciplina de Pruebas
 TODO.
-###
-
-## Developer Dependencies
-
-- JDK 17
-- Maven 3.8.8
-- Docker
-- Umlet (dev)
-
-## Deployment Dependencies
-
-- Docker

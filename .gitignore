@@ -28,3 +28,7 @@ docs/*.svg
 
 # IntelliJ
 *.idea
+*.iml
+
+# Target folder
+**/target/

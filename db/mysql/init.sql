@@ -17,6 +17,3 @@ grant all privileges on `dunktomic_db`.* TO 'user'@'%';
 grant trigger on `dunktomic_db`.* TO 'user'@'%';
 
 flush privileges;
-
--- Aux: show active users in the db:
--- select user from mysql.user;pro

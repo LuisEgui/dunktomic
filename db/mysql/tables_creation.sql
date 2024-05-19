@@ -69,12 +69,14 @@ create table if not exists
     foreign key (club_id) references Club(id)
   );
 
+-- Team table creation
 create table if not exists
   Team (
     id serial primary key,
     name enum ('team_a', 'team_b') not null
   );
 
+-- TeamPlayers table creation
 create table if not exists
   TeamPlayers (
     team_id bigint unsigned not null,

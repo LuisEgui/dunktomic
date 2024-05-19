@@ -12,7 +12,9 @@ use dunktomic_db;
 -- you have logged in with an admin user (root):
 create user if not exists 'user'@'%' 
     identified with mysql_native_password by '1234';
+
 grant all privileges on `dunktomic_db`.* TO 'user'@'%';
+grant trigger on `dunktomic_db`.* TO 'user'@'%';
 
 flush privileges;
 

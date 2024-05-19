@@ -84,28 +84,6 @@ create table if not exists
     foreign key (player) references Player(email)
   );
 
--- Trigger to check team size
-drop trigger if exists check_team_size;
-
-create trigger check_team_size
-before insert on TeamPlayers
-for each row
-begin
-  declare team_size int;
-
-  select
-    count(*) into team_size 
-  from
-    TeamPlayers
-  where
-    team_id = new.team_id;
-  
-  if team_size >= 5 then
-    signal sqlstate '45000' set message_text = 'Team is full';
-  end if;
-
-end;
-
 -- Game table creation
 create table if not exists
   Game (

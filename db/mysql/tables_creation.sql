@@ -47,10 +47,10 @@ create table if not exists
 create table if not exists
   Club (
     id serial primary key,
-    name varchar(70) not null,
+    name varchar(128) not null,
     district varchar(70),
     postal_code varchar(5),
-    street_address varchar(120),
+    street_address varchar(128),
     club_image bigint unsigned,
     latitude float,
     longitude float,

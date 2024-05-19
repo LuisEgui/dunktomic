@@ -23,7 +23,7 @@ db_url = f'mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}
 db = create_engine(db_url)
 conn = db.connect()
 
-def extract_madrid_clubs() -> list:
+def extract_clubs() -> list:
     """ Extracts Madrid clubs data from https://datos.madrid.es/
     Returns: list
     """
@@ -59,7 +59,7 @@ def extract_madrid_clubs() -> list:
     
     return raw_data['@graph']
 
-def process_madrid_clubs(raw_data: list) -> pd.DataFrame:
+def process_clubs(raw_data: list) -> pd.DataFrame:
     """ Processes Madrid clubs data
     Args:
         raw_data (list): Raw data extracted from Madrid clubs
@@ -82,7 +82,7 @@ def process_madrid_clubs(raw_data: list) -> pd.DataFrame:
     df = pd.DataFrame(clubs)
     return df
 
-def upload_madrid_clubs_to_mysql(df: pd.DataFrame):
+def upload_clubs_to_mysql(df: pd.DataFrame):
     """ Uploads Madrid clubs data to MySQL
     Args:
         df (pd.DataFrame): Madrid clubs data
@@ -91,7 +91,7 @@ def upload_madrid_clubs_to_mysql(df: pd.DataFrame):
 
     df.to_sql('raw_club', con=conn, if_exists='replace', index=False)
 
-def consolidate_madrid_clubs_data():
+def consolidate_clubs_data():
     """ Consolidates Club table with raw club data table """
     logging.info('consolidating raw clubs data into club table')
 
@@ -109,10 +109,10 @@ def remove_raw_club_table():
     conn.execute(text(query))
 
 def main(args):
-    raw_data = extract_madrid_clubs()
-    df = process_madrid_clubs(raw_data)
-    upload_madrid_clubs_to_mysql(df)
-    consolidate_madrid_clubs_data()
+    raw_data = extract_clubs()
+    df = process_clubs(raw_data)
+    upload_clubs_to_mysql(df)
+    consolidate_clubs_data()
     remove_raw_club_table()
 
     logging.info('done!')

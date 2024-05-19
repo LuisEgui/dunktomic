@@ -31,3 +31,8 @@ ij_java_space_inside_annotation_parens = false
 # Optional: Configure folding settings for methods and imports to reduce visual clutter in the IDE
 ij_java_folding_collapsible_imports = true
 ij_java_folding_methods = true
+
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 120

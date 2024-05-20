@@ -6,7 +6,7 @@ use dunktomic_db;
 create table if not exists
   Image (
     id serial primary key,
-    path varchar(256) not null,
+    path varchar(256) unique not null,
     mime_type enum('image/jpeg','image/jpg','image/png') not null
   );
 

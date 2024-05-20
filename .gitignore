@@ -34,7 +34,7 @@ docs/*.svg
 **/target/
 
 # Ignore env directory from scripts/sports_center_app
-scripts/sports_center_app/env/
+scripts/sports_center/env/
 
 tmp/
 tmp/*

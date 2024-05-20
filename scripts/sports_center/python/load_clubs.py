@@ -79,41 +79,60 @@ def populate_clubs_and_courts() -> pd.DataFrame:
                 """
                 res = conn.execute(text(query))
                 club_image = res.fetchone()[0]
+
+                if club_image is not None:
+                    query = text("""
+                        insert into Club (name, district, street_address, club_image, latitude, longitude, postal_code)
+                        values (:name, :district, :street_address, :club_image, :latitude, :longitude, :postal_code)
+                    """)
+                    conn.execute(query, {
+                        'name': name,
+                        'district': district,
+                        'street_address': street_address,
+                        'club_image': club_image,
+                        'latitude': latitude,
+                        'longitude': longitude,
+                        'postal_code': postal_code
+                    })
+                else:
+                    query = text("""
+                        insert into Club (name, district, street_address, latitude, longitude, postal_code)
+                        values (:name, :district, :street_address, :latitude, :longitude, :postal_code)
+                    """)
+                    conn.execute(query, {
+                        'name': name,
+                        'district': district,
+                        'street_address': street_address,
+                        'latitude': latitude,
+                        'longitude': longitude,
+                        'postal_code': postal_code
+                    })
+                
+                query = f"""
+                    select last_insert_id();
+                """
+                res = conn.execute(text(query))
+                club_id = res.fetchone()[0]
+                
+                courts = club["courts"]
+                for court in courts:
+                    court_name = court["name"]
+                    court_type = court["type"]
+                    query = text("""
+                        insert into Court (club_id, name, type)
+                        values (:club_id, :court_name, :court_type)
+                    """)
+                    conn.execute(query, {
+                        'club_id': club_id,
+                        'court_name': court_name,
+                        'court_type': court_type,
+                    })
+
                 transaction.commit()
             except Exception as e:
                 transaction.rollback()
                 logging.error(f"an error occurred during the transaction: {e}")
 
-            if club_image is not None:
-                query = text("""
-                    insert into Club (name, district, street_address, club_image, latitude, longitude, postal_code)
-                    values (:name, :district, :street_address, :club_image, :latitude, :longitude, :postal_code)
-                """)
-                conn.execute(query, {
-                    'name': name,
-                    'district': district,
-                    'street_address': street_address,
-                    'club_image': club_image,
-                    'latitude': latitude,
-                    'longitude': longitude,
-                    'postal_code': postal_code
-                })
-                conn.commit()
-            else:
-                query = text("""
-                    insert into Club (name, district, street_address, latitude, longitude, postal_code)
-                    values (:name, :district, :street_address, :latitude, :longitude, :postal_code)
-                """)
-                conn.execute(query, {
-                    'name': name,
-                    'district': district,
-                    'street_address': street_address,
-                    'latitude': latitude,
-                    'longitude': longitude,
-                    'postal_code': postal_code
-                })
-                conn.commit()
-            print(query)
             logging.info(f'inserted club {name} into database')
     logging.info('done!')
 

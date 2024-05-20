@@ -7,6 +7,7 @@ import os
 import pandas as pd
 import base64
 import hashlib
+import boto3
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -19,6 +20,15 @@ db_port = os.getenv('MYSQL_PORT')
 db_user = os.getenv('MYSQL_USERNAME')
 db_password = os.getenv('MYSQL_PASSWORD')
 db_name = os.getenv('MYSQL_DATABASE')
+s3_endpoint_url = os.getenv('S3_ENDPOINT_URL')
+s3_bucket = os.getenv('S3_BUCKET')
+
+s3_client = boto3.client(
+    's3',
+    endpoint_url=s3_endpoint_url,
+    aws_access_key_id='dummy_access_key',
+    aws_secret_access_key='dummy_secret_key'
+)
 
 db_url = f'mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
 db = create_engine(db_url)
@@ -72,6 +82,7 @@ def populate_clubs_and_courts() -> pd.DataFrame:
             except Exception as e:
                 transaction.rollback()
                 logging.error(f"an error occurred during the transaction: {e}")
+
             if club_image is not None:
                 query = text("""
                     insert into Club (name, district, street_address, club_image, latitude, longitude)
@@ -85,6 +96,7 @@ def populate_clubs_and_courts() -> pd.DataFrame:
                     'latitude': latitude,
                     'longitude': longitude
                 })
+                conn.commit()
             else:
                 query = text("""
                     insert into Club (name, district, street_address, latitude, longitude)
@@ -97,13 +109,14 @@ def populate_clubs_and_courts() -> pd.DataFrame:
                     'latitude': latitude,
                     'longitude': longitude
                 })
+                conn.commit()
             print(query)
             logging.info(f'inserted club {name} into database')
     logging.info('done!')
 
-def save_club_image(name, image_data):
+def save_club_image(name, image_data_url):
 
-    base64_data = image_data.split(',')[1]
+    base64_data = image_data_url.split(',')[1]
 
     # Fix base64 data by adding necessary padding
     missing_padding = len(base64_data) % 4
@@ -118,20 +131,8 @@ def save_club_image(name, image_data):
     with open(image_path, "wb") as file:
         file.write(image_data)
 
-    retries = 2
+    s3_client.upload_file(image_path, s3_bucket, f"{name}.jpeg")
 
-    s3mock_url = f"http://localhost:9090/clubs/{name}.jpeg"
-    response = requests.put(s3mock_url)
-
-    while retries > 0 and response.status_code != 200:
-        retries -= 1
-        logging.warning(f'retrying request. Retries left: {retries}')
-        response = requests.put(s3mock_url)
-
-    if retries == 0:
-        logging.error('failed to upload club image to s3mock')
-        raise RuntimeError(f'http get error, status != 200: {response.text}')
-    
     # removed local image after upload
     os.remove(image_path)
     

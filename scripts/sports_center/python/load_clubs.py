@@ -34,8 +34,8 @@ db_url = f'mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}
 db = create_engine(db_url)
 
 try:
-    if 'conn' in globals() and conn is not None:
-        conn.close()
+    if 'conn' in globals() and conn is not None: # type: ignore
+        conn.close() # type: ignore
         logging.info("Closed previous connection.")
     else:
         logging.info("No previous connection to close.")

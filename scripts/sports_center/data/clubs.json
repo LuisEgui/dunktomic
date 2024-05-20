@@ -4,6 +4,7 @@
         "latitude": "40.4024",
         "longitude": "-3.67728",
         "street_address": "Plaza de Daoíz y Velarde, 5, 28007, Madrid",
+        "postal_code": "28007",
         "phone": "914338950",
         "district": "DISTRITO RETIRO",
         "courts": [
@@ -23,6 +24,7 @@
         "latitude": "40.3574",
         "longitude": "-3.69153",
         "street_address": "Calle de la Alianza, 4, 28041, Madrid",
+        "postal_code": "28041",
         "phone": "913180435",
         "district": "DISTRITO VILLAVERDE",
         "courts": [
@@ -50,6 +52,7 @@
         "latitude": "40.3574",
         "longitude": "-3.69153",
         "street_address": "Calle Catorce Olivas, s/n, 28054, Madrid",
+        "postal_code": "28054",
         "phone": "915883731",
         "district": "DISTRITO CARABANCHEL",
         "courts": [
@@ -73,6 +76,7 @@
         "latitude": "40.4646",
         "longitude": "-3.62759",
         "street_address": "Carretera Estación de Hortaleza, 11, 28033, Madrid",
+        "postal_code": "28033",
         "phone": "913821965",
         "district": "DISTRITO HORTALEZA",
         "courts": [
@@ -96,6 +100,7 @@
         "latitude": "40.4143",
         "longitude": "-3.65595",
         "street_address": "Calle Alcalde Garrido Juaristi, 17, 28030, Madrid",
+        "postal_code": "28030",
         "phone": "914303511",
         "district": "DISTRITO MORATALAZ",
         "courts": [
@@ -115,6 +120,7 @@
         "latitude": "40.3789",
         "longitude": "-3.75626",
         "street_address": "Avenida de los Poblados, 72, 28044, Madrid",
+        "postal_code": "28044",
         "phone": "915888600",
         "district": "DISTRITO LATINA",
         "courts": [
@@ -138,6 +144,7 @@
         "latitude": "40.4091",
         "longitude": "-3.60326",
         "street_address": "Paseo Polideportivo, 3, 28032, Madrid",
+        "postal_code": "28032",
         "phone": "917769874",
         "district": "DISTRITO VICÁLVARO",
         "courts": [
@@ -157,6 +164,7 @@
         "latitude": "40.3738",
         "longitude": "-3.62315",
         "street_address": "Calle de Fuentidueña, 6, 28031, Madrid",
+        "postal_code": "28031",
         "phone": "913053451",
         "district": "DISTRITO VILLA DE VALLECAS",
         "courts": [
@@ -176,6 +184,7 @@
         "latitude": "40.3462",
         "longitude": "-3.68434",
         "street_address": "Calle de Benimamet, 137, 28021, Madrid",
+        "postal_code": "28021",
         "phone": "917953792",
         "district": "DISTRITO VILLAVERDE",
         "courts": [
@@ -191,6 +200,7 @@
         "latitude": "40.4651",
         "longitude": "-3.69282",
         "street_address": "Calle de Bravo Murillo, 376, 28020, Madrid",
+        "postal_code": "28020",
         "phone": "915714117",
         "district": "DISTRITO TETUÁN",
         "courts": [
@@ -214,6 +224,7 @@
         "latitude": "40.430062",
         "longitude": "-3.667562",
         "street_address": "Calle Doctor Gómez Ulla, 16, 20, 28028, Madrid",
+        "postal_code": "28028",
         "phone": "913553201",
         "district": "DISTRITO SALAMANCA",
         "courts": [
@@ -237,6 +248,7 @@
         "latitude": "40.3827",
         "longitude": "-3.77365",
         "street_address": "Avenida de las Águilas, 14, 28044, Madrid",
+        "postal_code": "28044",
         "phone": "917062868",
         "district": "DISTRITO LATINA",
         "courts": [
@@ -260,6 +272,7 @@
         "latitude": "40.3989",
         "longitude": "-3.63243",
         "street_address": "Calle Valdebernardo, 2, 28030, Madrid",
+        "postal_code": "28030",
         "phone": "917727100",
         "district": "DISTRITO MORATALAZ",
         "courts": [
@@ -275,6 +288,7 @@
         "latitude": "40.3826",
         "longitude": "-3.63372",
         "street_address": "Calle del Tranvía de Arganda, 4, 28031, Madrid",
+        "postal_code": "28031",
         "phone": "917774901",
         "district": "DISTRITO PUENTE DE VALLECAS",
         "courts": [
@@ -290,6 +304,7 @@
         "latitude": "40.4289",
         "longitude": "-3.61523",
         "street_address": "Avenida Hellín, 47, 28037, Madrid",
+        "postal_code": "28037",
         "phone": "913209818",
         "district": "DISTRITO SAN BLAS - CANILLEJAS",
         "courts": [
@@ -305,6 +320,7 @@
         "latitude": "40.4213",
         "longitude": "-3.66087",
         "street_address": "Calle del Alcalde Sáinz de Baranda, 94, 28007, Madrid",
+        "postal_code": "28007",
         "phone": "917654330",
         "district": "DISTRITO SALAMANCA",
         "courts": [
@@ -320,6 +336,7 @@
         "latitude": "40.4789",
         "longitude": "-3.69354",
         "street_address": "Avenida de Monforte de Lemos, 13, 28029, Madrid",
+        "postal_code": "28029",
         "phone": "913147943",
         "district": "DISTRITO FUENCARRAL - EL PARDO",
         "courts": [
@@ -335,6 +352,7 @@
         "latitude": "40.3611",
         "longitude": "-3.68606",
         "street_address": "Calle del Consenso, 1, 28041, Madrid",
+        "postal_code": "28041",
         "phone": "913180857",
         "district": "DISTRITO VILLAVERDE",
         "courts": [

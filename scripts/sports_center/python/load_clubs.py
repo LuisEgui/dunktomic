@@ -55,6 +55,7 @@ def populate_clubs_and_courts() -> pd.DataFrame:
         street_address = club["street_address"]
         latitude = club["latitude"]
         longitude = club["longitude"]
+        postal_code = club["postal_code"]
         club_image = None
 
         # Generate a shortened name using hashlib
@@ -85,8 +86,8 @@ def populate_clubs_and_courts() -> pd.DataFrame:
 
             if club_image is not None:
                 query = text("""
-                    insert into Club (name, district, street_address, club_image, latitude, longitude)
-                    values (:name, :district, :street_address, :club_image, :latitude, :longitude)
+                    insert into Club (name, district, street_address, club_image, latitude, longitude, postal_code)
+                    values (:name, :district, :street_address, :club_image, :latitude, :longitude, :postal_code)
                 """)
                 conn.execute(query, {
                     'name': name,
@@ -94,20 +95,22 @@ def populate_clubs_and_courts() -> pd.DataFrame:
                     'street_address': street_address,
                     'club_image': club_image,
                     'latitude': latitude,
-                    'longitude': longitude
+                    'longitude': longitude,
+                    'postal_code': postal_code
                 })
                 conn.commit()
             else:
                 query = text("""
-                    insert into Club (name, district, street_address, latitude, longitude)
-                    values (:name, :district, :street_address, :latitude, :longitude)
+                    insert into Club (name, district, street_address, latitude, longitude, postal_code)
+                    values (:name, :district, :street_address, :latitude, :longitude, :postal_code)
                 """)
                 conn.execute(query, {
                     'name': name,
                     'district': district,
                     'street_address': street_address,
                     'latitude': latitude,
-                    'longitude': longitude
+                    'longitude': longitude,
+                    'postal_code': postal_code
                 })
                 conn.commit()
             print(query)

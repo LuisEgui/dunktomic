@@ -5,11 +5,13 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 import os
 import pandas as pd
+import base64
+import hashlib
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-global conn
 global db
+global conn
 
 load_dotenv()
 db_host = os.getenv('MYSQL_HOST')
@@ -19,104 +21,124 @@ db_password = os.getenv('MYSQL_PASSWORD')
 db_name = os.getenv('MYSQL_DATABASE')
 
 db_url = f'mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
-
 db = create_engine(db_url)
-conn = db.connect()
 
-def extract_clubs() -> list:
-    """ Extracts Madrid clubs data from https://datos.madrid.es/
-    Returns: list
-    """
-    logging.info('extracting Madrid clubs data')
+try:
+    if 'conn' in globals() and conn is not None:
+        conn.close()
+        logging.info("Closed previous connection.")
+    else:
+        logging.info("No previous connection to close.")
+except Exception as e:
+    logging.error(f"Error closing previous connection: {e}")
 
-    headers = {
-        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        'accept-language': 'es-ES,es;q=0.5',
-    }
+def populate_clubs_and_courts() -> pd.DataFrame:
+    """ Populate clubs and courts tables on MySQL database """
+    logging.info('populating clubs and courts tables')
 
-    params = {
-        'vgnextoid': '00149033f2201410VgnVCM100000171f5a0aRCRD',
-        'format': 'json',
-        'file': '0',
-        'filename': '200186-0-polideportivos',
-        'mgmtid': '4a5fbef4b2503410VgnVCM2000000c205a0aRCRD',
-        'preview': 'full',
-    }
+    with open('./data/clubs.json', 'r', encoding='utf-8') as file:
+        clubs = json.load(file)
+    
+    for club in clubs:
+        name = club["name"]
+        district = club["district"]
+        street_address = club["street_address"]
+        latitude = club["latitude"]
+        longitude = club["longitude"]
+        club_image = None
+
+        # Generate a shortened name using hashlib
+        shortened_name = hashlib.sha256(name.encode('utf-8')).hexdigest()[:10]
+
+        # Extract base64 data from the data URL
+        image_data_url = club["image"]
+        save_club_image(shortened_name, image_data_url)
+        
+        with db.connect() as conn:
+            try:
+                transaction = conn.begin()
+                query = f"""
+                    insert into Image (path, mime_type) values
+                    ('{shortened_name}', 'image/jpeg');
+                """
+                conn.execute(text(query))
+
+                query = f"""
+                    select last_insert_id();
+                """
+                res = conn.execute(text(query))
+                club_image = res.fetchone()[0]
+                transaction.commit()
+            except Exception as e:
+                transaction.rollback()
+                logging.error(f"an error occurred during the transaction: {e}")
+            if club_image is not None:
+                query = text("""
+                    insert into Club (name, district, street_address, club_image, latitude, longitude)
+                    values (:name, :district, :street_address, :club_image, :latitude, :longitude)
+                """)
+                conn.execute(query, {
+                    'name': name,
+                    'district': district,
+                    'street_address': street_address,
+                    'club_image': club_image,
+                    'latitude': latitude,
+                    'longitude': longitude
+                })
+            else:
+                query = text("""
+                    insert into Club (name, district, street_address, latitude, longitude)
+                    values (:name, :district, :street_address, :latitude, :longitude)
+                """)
+                conn.execute(query, {
+                    'name': name,
+                    'district': district,
+                    'street_address': street_address,
+                    'latitude': latitude,
+                    'longitude': longitude
+                })
+            print(query)
+            logging.info(f'inserted club {name} into database')
+    logging.info('done!')
+
+def save_club_image(name, image_data):
+
+    base64_data = image_data.split(',')[1]
+
+    # Fix base64 data by adding necessary padding
+    missing_padding = len(base64_data) % 4
+    if missing_padding:
+        base64_data += '=' * (4 - missing_padding)
+
+    # Decode base64 data
+    image_data = base64.b64decode(base64_data)
+
+    # Save the image as a JPEG file
+    image_path = f"./data/{name}.jpeg"
+    with open(image_path, "wb") as file:
+        file.write(image_data)
 
     retries = 2
-    response = requests.get('https://datos.madrid.es/portal/site/egob/menuitem.ac61933d6ee3c31cae77ae7784f1a5a0/', params=params, headers=headers)
+
+    s3mock_url = f"http://localhost:9090/clubs/{name}.jpeg"
+    response = requests.put(s3mock_url)
 
     while retries > 0 and response.status_code != 200:
         retries -= 1
-        logging.warning(f'Retrying request. Retries left: {retries}')
-        response = requests.get('https://datos.madrid.es/portal/site/egob/menuitem.ac61933d6ee3c31cae77ae7784f1a5a0/', params=params, headers=headers)
+        logging.warning(f'retrying request. Retries left: {retries}')
+        response = requests.put(s3mock_url)
 
     if retries == 0:
-        logging.error('Failed to extract Madrid clubs data')
+        logging.error('failed to upload club image to s3mock')
         raise RuntimeError(f'http get error, status != 200: {response.text}')
     
-    raw_data = json.loads(response.text)
+    # removed local image after upload
+    os.remove(image_path)
     
-    return raw_data['@graph']
-
-def process_clubs(raw_data: list) -> pd.DataFrame:
-    """ Processes Madrid clubs data
-    Args:
-        raw_data (list): Raw data extracted from Madrid clubs
-    Returns: pd.DataFrame
-    """
-    logging.info('processing clubs data')
-
-    clubs = []
-
-    for element in raw_data:
-        row_data = {}
-        row_data['name'] = element['title']
-        row_data['district'] = element['address']['district']["@id"].split("/")[-1]
-        row_data['postal_code'] = element['address']['postal-code']
-        row_data['street_address'] = element['address']['street-address']
-        row_data['latitude'] = element['location']['latitude']
-        row_data['longitude'] = element['location']['longitude']
-        clubs.append(row_data)
-
-    df = pd.DataFrame(clubs)
-    return df
-
-def upload_clubs_to_mysql(df: pd.DataFrame):
-    """ Uploads Madrid clubs data to MySQL
-    Args:
-        df (pd.DataFrame): Madrid clubs data
-    """
-    logging.info('uploading clubs data to MySQL')
-
-    df.to_sql('raw_club', con=conn, if_exists='replace', index=False)
-
-def consolidate_clubs_data():
-    """ Consolidates Club table with raw club data table """
-    logging.info('consolidating raw clubs data into club table')
-
-    with open ('./mysql/club.sql', 'r') as file:
-        query = file.read()
-    
-    conn.execute(text(query))
-
-def remove_raw_club_table():
-    """ Removes raw club data table """
-    logging.info('removing raw club data table')
-
-    query = "drop table if exists raw_club;"
-    
-    conn.execute(text(query))
+    logging.info(f"uploaded image {name}.jpeg to s3mock")
 
 def main(args):
-    raw_data = extract_clubs()
-    df = process_clubs(raw_data)
-    upload_clubs_to_mysql(df)
-    consolidate_clubs_data()
-    remove_raw_club_table()
-
-    logging.info('done!')
-    conn.close()
+    populate_clubs_and_courts()
 
 if __name__ == "__main__":
     args = vars()

@@ -1,10 +1,8 @@
-import requests
 import json
 import logging
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 import os
-import pandas as pd
 import base64
 import hashlib
 import boto3
@@ -42,7 +40,7 @@ try:
 except Exception as e:
     logging.error(f"Error closing previous connection: {e}")
 
-def populate_clubs_and_courts() -> pd.DataFrame:
+def populate_clubs_and_courts():
     """ Populate clubs and courts tables on MySQL database """
     logging.info('populating clubs and courts tables')
 

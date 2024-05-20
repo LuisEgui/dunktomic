@@ -63,10 +63,11 @@ create table if not exists
 -- Court table creation
 create table if not exists
   Court (
-    club_id bigint unsigned unique not null,
+    club_id bigint unsigned not null,
     name varchar(70) not null,
     type enum ('indoor', 'outdoor', '3x3') not null,
-    foreign key (club_id) references Club(id)
+    foreign key (club_id) references Club(id),
+    primary key (club_id, name, type)
   );
 
 -- Team table creation
@@ -80,7 +81,7 @@ create table if not exists
 create table if not exists
   TeamPlayers (
     team_id bigint unsigned not null,
-    player varchar(30) unique not null,
+    player varchar(30) not null,
     primary key (team_id, player),
     foreign key (team_id) references Team(id),
     foreign key (player) references Player(email)
@@ -92,12 +93,14 @@ create table if not exists
     id serial primary key,
     state enum ('pending', 'cancelled', 'in_progress', 'finished') not null default 'pending',
     type enum ('public', 'private') not null,
-    court bigint unsigned not null,
+    club_id bigint unsigned not null,
+    court_name varchar(70) not null,
+    court_type enum ('indoor', 'outdoor', '3x3') not null,
     team_a bigint unsigned not null,
     team_b bigint unsigned not null,
-    result enum ('win_a', 'win_b', 'draw') not null,
+    result enum ('win_a', 'win_b', 'draw', 'not_played') not null default 'not_played',
     ddate datetime not null,
-    foreign key (court) references Court(club_id),
+    foreign key (club_id, court_name, court_type) references Court(club_id, name, type),
     foreign key (team_a) references Team(id),
     foreign key (team_b) references Team(id)
   );

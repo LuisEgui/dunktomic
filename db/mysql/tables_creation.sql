@@ -70,6 +70,89 @@ create table if not exists
     primary key (club_id, name, type)
   );
 
+-- Available hours table creation
+create table if not exists
+  AvailableHours (
+    start_time time not null,
+    end_time time not null,
+    check (
+      start_time < end_time 
+      and start_time >= '09:00:00' and start_time < '22:00:00' 
+      and end_time <= '22:00:00'
+    )
+  );
+
+-- Weekday table creation
+create table if not exists
+  Weekday (
+    select 'monday' as weekday union
+    select 'tuesday' as weekday union
+    select 'wednesday' as weekday union
+    select 'thursday' as weekday union
+    select 'friday' as weekday union
+    select 'saturday' as weekday union
+    select 'sunday' as weekday
+  );
+
+-- Create a procedure to populate the AvailableHours table
+delimiter //
+
+create procedure PopulateAvailableHours()
+begin
+  declare start_time time;
+  declare end_time time;
+
+  set start_time = '09:00:00';
+  set end_time = '09:50:00';
+
+  while start_time < '22:00:00' do
+    insert into AvailableHours (start_time, end_time) values (start_time, end_time);
+
+    set start_time = addtime(start_time, '01:00:00'); -- Incrementa la hora de inicio en 1 hora
+    set end_time = addtime(end_time, '01:00:00');     -- Incrementa la hora de finalización en 1 hora
+  end while;
+end //
+
+delimiter ;
+
+call PopulateAvailableHours();
+
+-- Slots table creation
+create table if not exists
+  Slots (
+    id serial primary key,
+    weekday enum ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday') not null,
+    start_time time not null,
+    end_time time not null
+  );
+
+insert into Slots (weekday, start_time, end_time)
+  select
+    w.weekday
+    ,a.start_time
+    ,a.end_time
+  from
+    Weekday w
+  cross join
+    AvailableHours a
+  order by
+    field(w.weekday, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')
+    ,a.start_time
+  ;
+
+-- AvailableCourtSlots table creation
+create table if not exists
+  AvailableCourtSlots (
+    club_id bigint unsigned not null,
+    court_name varchar(70) not null,
+    court_type enum ('indoor', 'outdoor', '3x3') not null,
+    slot_id bigint unsigned not null,
+    state enum ('available', 'booked') not null default 'available',
+    primary key (club_id, court_name, court_type, slot_id),
+    foreign key (club_id, court_name, court_type) references Court(club_id, name, type),
+    foreign key (slot_id) references Slots(id)
+  );
+
 -- Team table creation
 create table if not exists
   Team (

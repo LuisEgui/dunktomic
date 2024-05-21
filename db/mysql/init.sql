@@ -8,12 +8,12 @@ create database if not exists dunktomic_db
 -- Select the created database to be used 
 use dunktomic_db;
 
--- Create a common user, before this statement make sure
+-- Create a data ingestor user, before this statement make sure
 -- you have logged in with an admin user (root):
-create user if not exists 'user'@'%' 
-    identified with mysql_native_password by '1234';
+create user if not exists 'data_ingestor'@'%' 
+    identified with mysql_native_password by 'di_password';
 
-grant all privileges on `dunktomic_db`.* TO 'user'@'%';
-grant trigger on `dunktomic_db`.* TO 'user'@'%';
+grant all privileges on `dunktomic_db`.* TO 'data_ingestor'@'%';
+grant trigger on `dunktomic_db`.* TO 'data_ingestor'@'%';
 
 flush privileges;

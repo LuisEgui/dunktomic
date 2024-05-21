@@ -135,6 +135,11 @@ def populate_clubs_and_courts():
     logging.info('done!')
 
 def save_club_image(name, image_data_url):
+    """ Save club image to S3 
+    Args:
+        name (str): name of the image
+        image_data_url (str): base64 data URL of the image
+    """
 
     base64_data = image_data_url.split(',')[1]
 
@@ -158,8 +163,34 @@ def save_club_image(name, image_data_url):
     
     logging.info(f"uploaded image {name}.jpeg to s3mock")
 
+def populate_court_slots():
+    """ Populate AvailableCourtSlots table on MySQL database """
+    logging.info('populating available court slots table')
+    
+    with db.connect() as conn:
+        try:
+            query = text(f"""
+                insert into AvailableCourtSlots (club_id, court_name, court_type, slot_id)
+                    select 
+                        c.club_id
+                        ,c.name
+                        ,c.type
+                        ,s.id
+                    from
+                        Court c
+                    cross join 
+                        Slots s
+                    ;
+            """)
+            conn.execute(query)
+        except Exception as e:
+            logging.error(f"an error occurred during the transaction: {e}")
+        conn.commit()
+    logging.info('done!')
+
 def main(args):
     populate_clubs_and_courts()
+    populate_court_slots()
 
 if __name__ == "__main__":
     args = vars()

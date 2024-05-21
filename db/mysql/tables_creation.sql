@@ -36,6 +36,16 @@ create table if not exists
     )
   );
 
+-- Follows table creation
+create table if not exists
+  Follows (
+    follower varchar(30) not null,
+    followed varchar(30) not null,
+    primary key (follower, followed),
+    foreign key (follower) references Player(email),
+    foreign key (followed) references Player(email)
+  );
+
 -- Admin table creation
 create table if not exists
   Admin (
@@ -186,4 +196,23 @@ create table if not exists
     foreign key (club_id, court_name, court_type) references Court(club_id, name, type),
     foreign key (team_a) references Team(id),
     foreign key (team_b) references Team(id)
+  );
+
+-- Chat table creation
+create table if not exists
+  Chat (
+    id bigint unsigned primary key,
+    foreign key (id) references Game(id) on delete cascade
+  );
+
+-- Message table creation
+create table if not exists
+  ChatMessage (
+    id serial primary key,
+    chat_id bigint unsigned not null,
+    sender_email varchar(30) not null,
+    message varchar(256) not null,
+    sent_at timestamp not null,
+    foreign key (chat_id) references Chat(id),
+    foreign key (sender_email) references Player(email)
   );

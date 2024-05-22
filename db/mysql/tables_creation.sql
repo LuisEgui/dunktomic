@@ -192,7 +192,7 @@ create table if not exists
     team_a bigint unsigned not null,
     team_b bigint unsigned not null,
     result enum ('win_a', 'win_b', 'draw', 'not_played') not null default 'not_played',
-    ddate datetime not null,
+    start_time time not null,
     foreign key (club_id, court_name, court_type) references Court(club_id, name, type),
     foreign key (team_a) references Team(id),
     foreign key (team_b) references Team(id)

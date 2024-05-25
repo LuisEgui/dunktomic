@@ -5,7 +5,7 @@ use dunktomic_db;
 -- Image table creation
 create table if not exists
   Image (
-    id serial primary key,
+    id char(36) primary key,
     path varchar(256) unique not null,
     mime_type enum('image/jpeg','image/jpg','image/png') not null
   );
@@ -13,11 +13,12 @@ create table if not exists
 -- User table creation
 create table if not exists
   User (
-    email varchar(30) unique primary key,
+    id char(36) primary key,
+    email varchar(30) unique,
     name varchar(70),
     password varchar(70) not null,
     role enum ('admin', 'player') default 'player',
-    user_image bigint unsigned,
+    user_image char(36),
     foreign key (user_image) references Image(id),
     check (
       email regexp '^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
@@ -56,12 +57,12 @@ create table if not exists
 -- Club table creation
 create table if not exists
   Club (
-    id serial primary key,
+    id char(36) primary key,
     name varchar(128) unique not null,
     district varchar(70),
     postal_code varchar(5),
     street_address varchar(128),
-    club_image bigint unsigned,
+    club_image char(36),
     latitude float,
     longitude float,
     foreign key (club_image) references Image(id),
@@ -73,7 +74,7 @@ create table if not exists
 -- Court table creation
 create table if not exists
   Court (
-    club_id bigint unsigned not null,
+    club_id char(36) not null,
     name varchar(70) not null,
     type enum ('indoor', 'outdoor', '3x3') not null,
     foreign key (club_id) references Club(id),
@@ -86,8 +87,8 @@ create table if not exists
     start_time time not null,
     end_time time not null,
     check (
-      start_time < end_time 
-      and start_time >= '09:00:00' and start_time < '22:00:00' 
+      start_time < end_time
+      and start_time >= '09:00:00' and start_time < '22:00:00'
       and end_time <= '22:00:00'
     )
   );
@@ -153,7 +154,7 @@ insert into Slots (weekday, start_time, end_time)
 -- AvailableCourtSlots table creation
 create table if not exists
   AvailableCourtSlots (
-    club_id bigint unsigned not null,
+    club_id varchar(36) not null,
     court_name varchar(70) not null,
     court_type enum ('indoor', 'outdoor', '3x3') not null,
     slot_id bigint unsigned not null,
@@ -183,10 +184,10 @@ create table if not exists
 -- Game table creation
 create table if not exists
   Game (
-    id serial primary key,
+    id char(36) primary key,
     state enum ('pending', 'cancelled', 'in_progress', 'finished') not null default 'pending',
     type enum ('public', 'private') not null,
-    club_id bigint unsigned not null,
+    club_id char(36) not null,
     court_name varchar(70) not null,
     court_type enum ('indoor', 'outdoor', '3x3') not null,
     team_a bigint unsigned not null,
@@ -201,15 +202,15 @@ create table if not exists
 -- Chat table creation
 create table if not exists
   Chat (
-    id bigint unsigned primary key,
+    id char(36) primary key,
     foreign key (id) references Game(id) on delete cascade
   );
 
 -- Message table creation
 create table if not exists
   ChatMessage (
-    id serial primary key,
-    chat_id bigint unsigned not null,
+    id char(36) primary key,
+    chat_id char(36) not null,
     sender_email varchar(30) not null,
     message varchar(256) not null,
     sent_at timestamp not null,

@@ -6,6 +6,7 @@ import os
 import base64
 import hashlib
 import boto3
+import uuid
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -48,69 +49,45 @@ def populate_clubs_and_courts():
         clubs = json.load(file)
     
     for club in clubs:
+        id = str(uuid.uuid4())
         name = club["name"]
         district = club["district"]
         street_address = club["street_address"]
         latitude = club["latitude"]
         longitude = club["longitude"]
         postal_code = club["postal_code"]
-        club_image = None
 
         # Generate a shortened name using hashlib
         shortened_name = hashlib.sha256(name.encode('utf-8')).hexdigest()[:10]
 
         # Extract base64 data from the data URL
         image_data_url = club["image"]
-        save_club_image(shortened_name, image_data_url)
+        #save_club_image(shortened_name, image_data_url)
         
         with db.connect() as conn:
             try:
                 transaction = conn.begin()
+                image_id = str(uuid.uuid4())
                 query = f"""
-                    insert into Image (path, mime_type) values
-                    ('{shortened_name}', 'image/jpeg');
+                    insert into Image (id, path, mime_type) values
+                    ('{image_id}', '{shortened_name}', 'image/jpeg');
                 """
                 conn.execute(text(query))
 
-                query = f"""
-                    select last_insert_id();
-                """
-                res = conn.execute(text(query))
-                club_image = res.fetchone()[0]
-
-                if club_image is not None:
-                    query = text("""
-                        insert into Club (name, district, street_address, club_image, latitude, longitude, postal_code)
-                        values (:name, :district, :street_address, :club_image, :latitude, :longitude, :postal_code)
-                    """)
-                    conn.execute(query, {
-                        'name': name,
-                        'district': district,
-                        'street_address': street_address,
-                        'club_image': club_image,
-                        'latitude': latitude,
-                        'longitude': longitude,
-                        'postal_code': postal_code
-                    })
-                else:
-                    query = text("""
-                        insert into Club (name, district, street_address, latitude, longitude, postal_code)
-                        values (:name, :district, :street_address, :latitude, :longitude, :postal_code)
-                    """)
-                    conn.execute(query, {
-                        'name': name,
-                        'district': district,
-                        'street_address': street_address,
-                        'latitude': latitude,
-                        'longitude': longitude,
-                        'postal_code': postal_code
-                    })
-                
-                query = f"""
-                    select last_insert_id();
-                """
-                res = conn.execute(text(query))
-                club_id = res.fetchone()[0]
+                query = text("""
+                    insert into Club (id, name, district, street_address, club_image, latitude, longitude, postal_code)
+                    values (:id, :name, :district, :street_address, :club_image, :latitude, :longitude, :postal_code)
+                """)
+                conn.execute(query, {
+                    'id': id,
+                    'name': name,
+                    'district': district,
+                    'street_address': street_address,
+                    'club_image': image_id,
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'postal_code': postal_code
+                })
                 
                 courts = club["courts"]
                 for court in courts:
@@ -121,7 +98,7 @@ def populate_clubs_and_courts():
                         values (:club_id, :court_name, :court_type)
                     """)
                     conn.execute(query, {
-                        'club_id': club_id,
+                        'club_id': id,
                         'court_name': court_name,
                         'court_type': court_type,
                     })

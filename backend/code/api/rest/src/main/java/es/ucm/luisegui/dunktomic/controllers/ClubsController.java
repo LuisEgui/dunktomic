@@ -12,8 +12,6 @@ import es.ucm.luisegui.dunktomic.rest.ClubsApi;
 import es.ucm.luisegui.dunktomic.rest.dtos.Club;
 import es.ucm.luisegui.dunktomic.rest.dtos.ClubsPage;
 import es.ucm.luisegui.dunktomic.rest.dtos.CourtsPage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

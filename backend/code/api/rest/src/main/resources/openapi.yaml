@@ -180,6 +180,11 @@ paths:
       operationId: getClubCourts
       parameters:
         - $ref: '#/components/parameters/acceptLanguage'
+        - name: page
+          in: query
+          description: Page
+          schema:
+            type: integer
         - name: id
           in: path
           description: The club identifier

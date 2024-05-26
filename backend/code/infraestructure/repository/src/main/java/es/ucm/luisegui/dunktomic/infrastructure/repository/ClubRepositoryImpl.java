@@ -1,11 +1,14 @@
 package es.ucm.luisegui.dunktomic.infrastructure.repository;
 
 import es.ucm.luisegui.dunktomic.domain.entities.Club;
+import es.ucm.luisegui.dunktomic.domain.entities.Court;
 import es.ucm.luisegui.dunktomic.domain.repositories.ClubRepository;
 import es.ucm.luisegui.dunktomic.domain.valueobjects.EntityId;
 import es.ucm.luisegui.dunktomic.infrastructure.database.adapters.ClubDbAdapter;
 import es.ucm.luisegui.dunktomic.infrastructure.database.models.ClubEntity;
+import es.ucm.luisegui.dunktomic.infrastructure.database.models.CourtEntity;
 import es.ucm.luisegui.dunktomic.infrastructure.repository.mappers.ClubMapper;
+import es.ucm.luisegui.dunktomic.infrastructure.repository.mappers.CourtMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,6 +40,14 @@ public class ClubRepositoryImpl implements ClubRepository
         return new PageImpl<>(clubsPage.getContent().stream().map(new ClubMapper()::toEntity).collect(Collectors.toList()),
             pageable,
             clubsPage.getTotalElements());
+    }
+
+    @Override
+    public Page<Court> findCourts(EntityId id, Pageable pageable) {
+        Page<CourtEntity> courtsPage = clubDbAdapter.findClubCourts(id.getId(), pageable);
+        return new PageImpl<>(courtsPage.getContent().stream().map(new CourtMapper()::toEntity).collect(Collectors.toList()),
+            pageable,
+            courtsPage.getTotalElements());
     }
 
 }

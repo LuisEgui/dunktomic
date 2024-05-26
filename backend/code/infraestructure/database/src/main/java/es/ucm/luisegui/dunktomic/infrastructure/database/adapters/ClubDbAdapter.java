@@ -1,6 +1,7 @@
 package es.ucm.luisegui.dunktomic.infrastructure.database.adapters;
 
 import es.ucm.luisegui.dunktomic.infrastructure.database.models.ClubEntity;
+import es.ucm.luisegui.dunktomic.infrastructure.database.models.CourtEntity;
 import es.ucm.luisegui.dunktomic.infrastructure.database.models.ImageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +43,14 @@ public class ClubDbAdapter
             new ImageEntity(UUID.fromString(rs.getString(ImageEntity.Field.ID)), rs.getString(ImageEntity.Field.PATH), rs.getString(ImageEntity.Field.MIME_TYPE)),
             rs.getFloat(ClubEntity.Field.LATITUDE),
             rs.getFloat(ClubEntity.Field.LONGITUDE)
+        );
+    }
+
+    private static CourtEntity mapRowCourt(ResultSet rs, int rowNum) throws SQLException {
+        return new CourtEntity(
+            UUID.fromString(rs.getString(CourtEntity.Field.CLUB_ID)),
+            rs.getString(CourtEntity.Field.NAME),
+            rs.getString(CourtEntity.Field.TYPE)
         );
     }
 
@@ -105,6 +114,35 @@ public class ClubDbAdapter
             return Page.empty();
 
         return new PageImpl<>(clubs, pageable, clubs.size());
+    }
+
+    public Page<CourtEntity> findClubCourts(UUID id, Pageable pageable) {
+        if (pageable == null)
+            pageable = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+
+        int pageSize = pageable.isPaged() ? pageable.getPageSize() : DEFAULT_PAGE_SIZE;
+        int pageNumber = pageable.isPaged() ? pageable.getPageNumber() : DEFAULT_PAGE_NUMBER;
+
+        StringBuilder sql = new StringBuilder("select " +
+            "cc.club_id, cc.name, cc.type " +
+            "from Court cc " +
+            "where cc.club_id = :id " +
+            "limit :limit offset :offset");
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id.toString());
+        params.addValue("limit", pageSize);
+        params.addValue("offset", pageNumber * pageSize);
+
+        List<CourtEntity> courts = jdbcTemplate.query(
+            sql.toString(),
+            params,
+            ClubDbAdapter::mapRowCourt);
+
+        if (courts.isEmpty())
+            return Page.empty();
+
+        return new PageImpl<>(courts, pageable, courts.size());
     }
 
 }

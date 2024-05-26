@@ -1,5 +1,8 @@
 package es.ucm.luisegui.dunktomic.domain.valueobjects;
 
+import lombok.Getter;
+
+@Getter
 public enum MimeType
 {
     JPEG("image/jpeg"),
@@ -10,10 +13,6 @@ public enum MimeType
 
     MimeType(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     public static MimeType fromValue(String value) {

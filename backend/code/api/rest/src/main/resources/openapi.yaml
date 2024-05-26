@@ -117,6 +117,16 @@ paths:
           description: Street Address
           schema:
             type: string
+        - name: page
+          in: query
+          description: Page
+          schema:
+            type: integer
+        - name: size
+          in: query
+          description: Page size
+          schema:
+            type: integer
       responses:
         '200':
           description: ''

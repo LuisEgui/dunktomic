@@ -8,7 +8,7 @@ public class PageMetadataDto
     public static <T> PageMetadata toMetadataModel(Page<T> pageMetadata) {
         return new PageMetadata(
             pageMetadata.getNumber(),
-            pageMetadata.getTotalPages()-1,
+            pageMetadata.getTotalPages(),
             pageMetadata.getSize(),
             (int) pageMetadata.getTotalElements()
         );

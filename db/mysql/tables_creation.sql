@@ -16,7 +16,6 @@ create table if not exists
     id char(36) primary key,
     email varchar(30) unique,
     name varchar(70),
-    password varchar(70) not null,
     role enum ('admin', 'player') default 'player',
     user_image char(36),
     foreign key (user_image) references Image(id),
@@ -70,6 +69,9 @@ create table if not exists
       postal_code regexp '^28[0-9]{3}$'
     )
   );
+
+alter table Club drop index name;
+create fulltext index name on Club(name);
 
 -- Court table creation
 create table if not exists

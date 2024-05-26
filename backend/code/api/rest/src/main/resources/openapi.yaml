@@ -219,6 +219,7 @@ paths:
         - name: type
           in: query
           description: Court type
+          required: true
           allowEmptyValue: true
           schema:
             type: string
@@ -226,9 +227,16 @@ paths:
         - name: weekday
           in: query
           description: Weekday
+          required: true
           schema:
             type: string
             example: monday
+        - name: name
+          in: query
+          description: Court name
+          required: true
+          schema:
+            type: string
         - name: id
           in: path
           description: The club identifier
@@ -1021,7 +1029,7 @@ components:
           enum:
             - public
             - private
-    qwfv18qbesdo4:
+    CourtPositions:
       type: string
       enum:
         - PG

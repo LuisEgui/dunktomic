@@ -1,16 +1,20 @@
 package es.ucm.luisegui.dunktomic.controllers;
 
+import es.ucm.luisegui.dunktomic.application.dtos.FindClubCourtAvailabilityDto;
 import es.ucm.luisegui.dunktomic.application.dtos.FindClubCourtsDto;
 import es.ucm.luisegui.dunktomic.application.dtos.FindClubsFilters;
+import es.ucm.luisegui.dunktomic.application.usecases.FindClubCourtAvailabilityUseCase;
 import es.ucm.luisegui.dunktomic.application.usecases.FindClubCourtsUseCase;
 import es.ucm.luisegui.dunktomic.application.usecases.FindClubUseCase;
 import es.ucm.luisegui.dunktomic.application.usecases.FindClubsUseCase;
 import es.ucm.luisegui.dunktomic.dtos.ClubDto;
 import es.ucm.luisegui.dunktomic.dtos.ClubsPageDto;
+import es.ucm.luisegui.dunktomic.dtos.CourtSlotsPageDto;
 import es.ucm.luisegui.dunktomic.dtos.CourtsPageDto;
 import es.ucm.luisegui.dunktomic.rest.ClubsApi;
 import es.ucm.luisegui.dunktomic.rest.dtos.Club;
 import es.ucm.luisegui.dunktomic.rest.dtos.ClubsPage;
+import es.ucm.luisegui.dunktomic.rest.dtos.CourtSlotsPage;
 import es.ucm.luisegui.dunktomic.rest.dtos.CourtsPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,12 +35,14 @@ public class ClubsController implements ClubsApi
     private final FindClubUseCase findClubUseCase;
     private final FindClubsUseCase findClubsUseCase;
     private final FindClubCourtsUseCase findClubCourtsUseCase;
+    private final FindClubCourtAvailabilityUseCase findClubCourtAvailabilityUseCase;
 
     @Autowired
-    public ClubsController(FindClubUseCase findClubUseCase, FindClubsUseCase findClubsUseCase, FindClubCourtsUseCase findClubCourtsUseCase) {
+    public ClubsController(FindClubUseCase findClubUseCase, FindClubsUseCase findClubsUseCase, FindClubCourtsUseCase findClubCourtsUseCase, FindClubCourtAvailabilityUseCase findClubCourtAvailabilityUseCase) {
         this.findClubUseCase = findClubUseCase;
         this.findClubsUseCase = findClubsUseCase;
         this.findClubCourtsUseCase = findClubCourtsUseCase;
+        this.findClubCourtAvailabilityUseCase = findClubCourtAvailabilityUseCase;
     }
 
     @Override
@@ -57,6 +63,13 @@ public class ClubsController implements ClubsApi
         FindClubCourtsDto input = new FindClubCourtsDto(id, pageRequestOf(page, null));
         Page<es.ucm.luisegui.dunktomic.domain.entities.Court> courts = findClubCourtsUseCase.execute(input);
         return ResponseEntity.ok().body(CourtsPageDto.toModel(courts));
+    }
+
+    @Override
+    public ResponseEntity<CourtSlotsPage> getCourtSlots(String type, String weekday, String name, String id, String acceptLanguage) {
+        FindClubCourtAvailabilityDto input = new FindClubCourtAvailabilityDto(id, decodeUrl(name), type, weekday);
+        Page<es.ucm.luisegui.dunktomic.domain.entities.CourtSlot> courtSlots = findClubCourtAvailabilityUseCase.execute(input);
+        return ResponseEntity.ok().body(CourtSlotsPageDto.toModel(courtSlots));
     }
 
     private static Pageable pageRequestOf(Integer page, Integer size) {

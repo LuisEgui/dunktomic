@@ -2,6 +2,7 @@ package es.ucm.luisegui.dunktomic.infrastructure.database.adapters;
 
 import es.ucm.luisegui.dunktomic.infrastructure.database.models.ClubEntity;
 import es.ucm.luisegui.dunktomic.infrastructure.database.models.CourtEntity;
+import es.ucm.luisegui.dunktomic.infrastructure.database.models.CourtSlotEntity;
 import es.ucm.luisegui.dunktomic.infrastructure.database.models.ImageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,9 +18,11 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.time.LocalTime;
 
 @Data
 @Component
@@ -32,6 +35,10 @@ public class ClubDbAdapter
 
     private static final int DEFAULT_PAGE_SIZE = 100;
     private static final int DEFAULT_PAGE_NUMBER = 0;
+
+    private static LocalTime parseLocalTime(String timeString) {
+        return LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
 
     private static ClubEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new ClubEntity(
@@ -51,6 +58,17 @@ public class ClubDbAdapter
             UUID.fromString(rs.getString(CourtEntity.Field.CLUB_ID)),
             rs.getString(CourtEntity.Field.NAME),
             rs.getString(CourtEntity.Field.TYPE)
+        );
+    }
+
+    private static CourtSlotEntity mapRowCourtAvailabilty(ResultSet rs, int rowNum) throws SQLException {
+        return new CourtSlotEntity(
+            rs.getString(CourtSlotEntity.Field.NAME),
+            rs.getString(CourtSlotEntity.Field.TYPE),
+            rs.getString(CourtSlotEntity.Field.WEEKDAY),
+            parseLocalTime(rs.getTime(CourtSlotEntity.Field.START_TIME).toString()),
+            parseLocalTime(rs.getTime(CourtSlotEntity.Field.END_TIME).toString()),
+            rs.getString(CourtSlotEntity.Field.STATE)
         );
     }
 
@@ -145,4 +163,42 @@ public class ClubDbAdapter
         return new PageImpl<>(courts, pageable, courts.size());
     }
 
+    public Page<CourtSlotEntity> findClubCourtAvailability(UUID id, String courtName, String courtType, String weekDay) {
+
+        StringBuilder sql = new StringBuilder(
+            "select " +
+            "   c.name as name, c.type as type, acs.weekday as weekday, acs.start_time as start_time, acs.end_time as end_time, acs.state as state " +
+            "from Court c " +
+            "left join " +
+            "( " +
+            "   select acs.club_id, acs.court_name, acs.court_type, acs.state, s.weekday, s.start_time, s.end_time " +
+            "   from AvailableCourtSlots acs " +
+            "   left join Slots s on s.id = acs.slot_id " +
+            ") acs on " +
+                "c.club_id = acs.club_id and c.name = acs.court_name and c.type = acs.court_type " +
+            "where " +
+                "c.club_id = :id and " +
+                "c.name = :courtName and " +
+                "c.type = :courtType and " +
+                "acs.weekday = :weekDay " +
+            "order by acs.weekday, acs.start_time, acs.end_time ");
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        params.addValue("id", id.toString());
+        params.addValue("courtName", courtName);
+        params.addValue("courtType", courtType);
+        params.addValue("weekDay", weekDay);
+
+        List<CourtSlotEntity> courts = jdbcTemplate.query(
+            sql.toString(),
+            params,
+            ClubDbAdapter::mapRowCourtAvailabilty);
+
+        if (courts.isEmpty())
+            return Page.empty();
+
+        Pageable pageable = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+        return new PageImpl<>(courts, pageable, courts.size());
+    }
 }

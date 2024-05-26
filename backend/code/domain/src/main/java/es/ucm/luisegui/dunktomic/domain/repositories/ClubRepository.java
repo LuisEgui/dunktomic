@@ -2,6 +2,7 @@ package es.ucm.luisegui.dunktomic.domain.repositories;
 
 import es.ucm.luisegui.dunktomic.domain.entities.Club;
 import es.ucm.luisegui.dunktomic.domain.entities.Court;
+import es.ucm.luisegui.dunktomic.domain.entities.CourtSlot;
 import es.ucm.luisegui.dunktomic.domain.valueobjects.EntityId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,4 +15,6 @@ public interface ClubRepository
     Page<Club> find(String name, String district, String postalCode, String streetAddress, Pageable pageable);
 
     Page<Court> findCourts(EntityId id, Pageable pageable);
+
+    Page<CourtSlot> findCourtSlots(EntityId id, String courtName, String courtType, String weekDay);
 }

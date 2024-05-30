@@ -8,18 +8,17 @@
         <groupId>es.ucm.luisegui</groupId>
         <artifactId>dunktomic</artifactId>
         <version>0.1.0</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>rest</artifactId>
-    <name>${project.artifactId}</name>
-    <packaging>jar</packaging>
+    <artifactId>keycloak-client</artifactId>
 
     <properties>
         <maven.compiler.source>22</maven.compiler.source>
         <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version>
+        <swagger.annotations.v3.version>2.2.8</swagger.annotations.v3.version>
+        <swagger.parser.v3.version>2.1.14</swagger.parser.v3.version>
     </properties>
 
     <dependencies>
@@ -28,16 +27,17 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>es.ucm.luisegui</groupId>
-            <artifactId>application</artifactId>
-            <version>0.1.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
-        <!-- OPENAPI GENERATOR DEPENDENCIES -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <!-- OPENAPI GENERATOR DEPENDENCIES -->
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
@@ -49,35 +49,27 @@
             <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>openapi-generator-maven-plugin</artifactId>
-            <version>7.3.0</version>
-            <scope>provided</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.annotations.v3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.parser.v3</groupId>
+            <artifactId>swagger-parser</artifactId>
+            <version>${swagger.parser.v3.version}</version>
         </dependency>
         <!--  -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
-        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <phase>none</phase>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <excludes>
                         <exclude>
@@ -87,7 +79,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -100,17 +91,20 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
-                            <generatorName>spring</generatorName>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/openapi.yaml</inputSpec>
+                            <generatorName>java</generatorName>
                             <skipOverwrite>true</skipOverwrite>
-                            <library>spring-boot</library>
+                            <library>webclient</library>
+                            <generateModels>true</generateModels>
+                            <generateModelTests>false</generateModelTests>
                             <generateModelDocumentation>false</generateModelDocumentation>
-                            <generateApiTests>true</generateApiTests>
-                            <generateApiDocumentation>false</generateApiDocumentation>
-                            <apiPackage>es.ucm.luisegui.dunktomic.rest</apiPackage>
-                            <modelPackage>es.ucm.luisegui.dunktomic.rest.dtos</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <invokerPackage>es.ucm.luisegui.dunktomic.infrastructure.keycloakclient</invokerPackage>
+                            <apiPackage>es.ucm.luisegui.dunktomic.infrastructure.keycloakclient.api</apiPackage>
+                            <modelPackage>es.ucm.luisegui.dunktomic.infrastructure.keycloakclient.model</modelPackage>
                             <configOptions>
                                 <useSpringBoot3>true</useSpringBoot3>
+                                <useJakartaEe>true</useJakartaEe>
                                 <booleanGetterPrefix>is</booleanGetterPrefix>
                                 <interfaceOnly>true</interfaceOnly>
                                 <readOnly>true</readOnly>

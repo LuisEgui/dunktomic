@@ -25,4 +25,13 @@ public enum CourtPositions
         }
         throw new IllegalArgumentException("Unknown court position: " + value);
     }
+
+    public static String fromValueAsString(String value) {
+        for (CourtPositions position : CourtPositions.values()) {
+            if (position.value.equalsIgnoreCase(value)) {
+                return position.name();
+            }
+        }
+        throw new IllegalArgumentException("Unknown court position: " + value);
+    }
 }

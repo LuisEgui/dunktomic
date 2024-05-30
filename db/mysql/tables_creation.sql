@@ -18,7 +18,7 @@ create table if not exists
     name varchar(70),
     role enum ('admin', 'player') default 'player',
     user_image char(36),
-    foreign key (user_image) references Image(id),
+    foreign key (user_image) references Image(id) on update cascade,
     check (
       email regexp '^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
     )
@@ -29,8 +29,8 @@ create table if not exists
   Player (
     email varchar(30) unique not null,
     positions_on_court set ('PG', 'SG', 'SF', 'PF', 'C') not null,
-    level float,
-    foreign key (email) references User(email),
+    level float default 1,
+    foreign key (email) references User(email) on update cascade,
     check (
       level >= 0 and level <= 10
     )
@@ -42,8 +42,8 @@ create table if not exists
     follower varchar(30) not null,
     followed varchar(30) not null,
     primary key (follower, followed),
-    foreign key (follower) references Player(email),
-    foreign key (followed) references Player(email)
+    foreign key (follower) references Player(email) on update cascade,
+    foreign key (followed) references Player(email) on update cascade
   );
 
 -- Admin table creation
@@ -64,7 +64,7 @@ create table if not exists
     club_image char(36),
     latitude float,
     longitude float,
-    foreign key (club_image) references Image(id),
+    foreign key (club_image) references Image(id) on update cascade,
     check (
       postal_code regexp '^28[0-9]{3}$'
     )

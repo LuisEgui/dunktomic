@@ -29,7 +29,6 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class ClubDbAdapter
 {
-    private static final Logger log = LoggerFactory.getLogger(ClubDbAdapter.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final JdbcClient jdbcClient;
 

@@ -21,4 +21,16 @@ public class ImageMapper
             image.setMimeType(MimeType.JPEG);
         return image;
     }
+
+    public ImageEntity fromEntity(Image image)
+    {
+        ImageEntity imageEntity = new ImageEntity();
+
+        if (image != null) {
+            imageEntity.setPath(image.getPath());
+            imageEntity.setMimeType(image.getMimeType().getValue());
+        }
+
+        return imageEntity;
+    }
 }

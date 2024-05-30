@@ -23,6 +23,7 @@
         <module>domain</module>
         <module>infraestructure/database</module>
         <module>infraestructure/repository</module>
+        <module>infraestructure/keycloak-client</module>
     </modules>
 
     <properties>

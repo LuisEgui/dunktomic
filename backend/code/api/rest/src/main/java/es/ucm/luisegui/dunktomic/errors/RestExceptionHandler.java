@@ -3,6 +3,7 @@ package es.ucm.luisegui.dunktomic.errors;
 import es.ucm.luisegui.dunktomic.domain.exceptions.ClubNotFoundException;
 import es.ucm.luisegui.dunktomic.domain.exceptions.DomainException;
 import es.ucm.luisegui.dunktomic.domain.exceptions.EntityNotFoundException;
+import es.ucm.luisegui.dunktomic.domain.exceptions.PlayerAlreadyExistsException;
 import es.ucm.luisegui.dunktomic.rest.dtos.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Error> handle(ClubNotFoundException ex) {
         return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
+            .body(RestError.NOT_FOUND.error(ex.getCode(), ex.getDescription()));
+    }
+
+    @ExceptionHandler(PlayerAlreadyExistsException.class)
+    public ResponseEntity<Error> handle(PlayerAlreadyExistsException ex) {
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT)
             .body(RestError.NOT_FOUND.error(ex.getCode(), ex.getDescription()));
     }
 

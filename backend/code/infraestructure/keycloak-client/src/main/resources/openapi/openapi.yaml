@@ -1,0 +1,362 @@
+openapi: 3.0.3
+info:
+  title: Keycloak
+  description: Keycloak API
+  version: 19.0.0
+tags:
+  - name: Users
+  - name: Auth
+servers:
+  - url: http://localhost:8080/
+    description: Keycloak server
+paths:
+  /admin/realms/{realm}/users:
+    parameters:
+      - in: path
+        name: realm
+        description: realm name
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Users
+      operationId: getUsers
+      summary: Get users
+      description: Returns a stream of users, filtered according to query parameters.
+      parameters:
+        - in: query
+          name: briefRepresentation
+          description: >-
+            Boolean which defines whether brief representations are returned
+            (default: false)
+          schema:
+            type: boolean
+        - in: query
+          name: email
+          description: >-
+            A String contained in email, or the complete email, if param "exact"
+            is true
+          schema:
+            type: string
+        - in: query
+          name: emailVerified
+          description: whether the email has been verified
+          schema:
+            type: boolean
+        - in: query
+          name: enabled
+          description: Boolean representing if user is enabled or not
+          schema:
+            type: boolean
+          style: form
+        - in: query
+          name: exact
+          description: >-
+            Boolean which defines whether the params "last", "first", "email"
+            and "username" must match exactly
+          schema:
+            type: boolean
+        - in: query
+          name: first
+          description: Pagination offset
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: firstName
+          description: >-
+            A String contained in firstName, or the complete firstName, if param
+            "exact" is true
+          schema:
+            type: string
+        - in: query
+          name: idpAlias
+          description: The alias of an Identity Provider linked to the user
+          schema:
+            type: string
+        - in: query
+          name: idpUserId
+          description: The userId at an Identity Provider linked to the user
+          schema:
+            type: string
+        - in: query
+          name: lastName
+          description: >-
+            A String contained in lastName, or the complete lastName, if param
+            "exact" is true
+          schema:
+            type: string
+        - in: query
+          name: max
+          description: Maximum results size (defaults to 100)
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: q
+          description: >-
+            A query to search for custom attributes, in the format 'key1:value2
+            key2:value2'
+          schema:
+            type: string
+        - in: query
+          name: search
+          description: A String contained in username, first or last name, or email
+          schema:
+            type: string
+        - in: query
+          name: username
+          description: >-
+            A String contained in username, or the complete username, if param
+            "exact" is true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRepresentation'
+    post:
+      tags:
+        - Users
+      operationId: createUser
+      summary: Create a new user
+      description: Username must be unique
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRepresentation'
+        required: true
+      responses:
+        '201':
+          description: success
+  /admin/realms/{realm}/users/{id}:
+    parameters:
+      - in: path
+        name: realm
+        description: realm name
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: id
+        description: User id
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - Users
+      operationId: updateUser
+      summary: Update the user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRepresentation'
+        required: true
+      responses:
+        '202':
+          description: success
+    get:
+      tags:
+        - Users
+      operationId: getUser
+      summary: Get a user
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRepresentation'
+  /realms/{realm}/protocol/openid-connect/token:
+    parameters:
+      - in: path
+        name: realm
+        description: realm name
+        required: true
+        schema:
+          type: string
+    post:
+      tags:
+        - Auth
+      operationId: exchangeToken
+      summary: Exchange a token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenExchangeForm'
+        required: true
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+components:
+  schemas:
+    UserRepresentation:
+      type: object
+      properties:
+        access:
+          type: object
+          additionalProperties: true
+        attributes:
+          type: object
+          additionalProperties: true
+        clientConsents:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserConsentRepresentation'
+        clientRoles:
+          type: object
+          additionalProperties: true
+        createdTimestamp:
+          type: integer
+          format: int64
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialRepresentation'
+        disableableCredentialTypes:
+          type: array
+          items:
+            type: string
+        email:
+          type: string
+        emailVerified:
+          type: boolean
+        enabled:
+          type: boolean
+        federatedIdentities:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederatedIdentityRepresentation'
+        federationLink:
+          type: string
+        firstName:
+          type: string
+        groups:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+        lastName:
+          type: string
+        notBefore:
+          type: integer
+          format: int32
+        origin:
+          type: string
+        realmRoles:
+          type: array
+          items:
+            type: string
+        requiredActions:
+          type: array
+          items:
+            type: string
+        self:
+          type: string
+        serviceAccountClientId:
+          type: string
+        username:
+          type: string
+    CredentialRepresentation:
+      type: object
+      properties:
+        createdDate:
+          type: integer
+          format: int64
+        credentialData:
+          type: string
+        id:
+          type: string
+        priority:
+          type: integer
+          format: int32
+        secretData:
+          type: string
+        temporary:
+          type: boolean
+        type:
+          type: string
+        userLabel:
+          type: string
+        value:
+          type: string
+    FederatedIdentityRepresentation:
+      type: object
+      properties:
+        identityProvider:
+          type: string
+        userId:
+          type: string
+        userName:
+          type: string
+    UserConsentRepresentation:
+      type: object
+      properties:
+        clientId:
+          type: string
+        createdDate:
+          type: integer
+          format: int64
+        grantedClientScopes:
+          type: array
+          items:
+            type: string
+        lastUpdatedDate:
+          type: integer
+          format: int64
+    TokenExchangeForm:
+      type: object
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        grant_type:
+          type: string
+          nullable: false
+        requested_subject:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+    Token:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The access token issued.
+        token_type:
+          type: string
+          description: The type of the token issued.
+        expires_in:
+          type: integer
+          description: The lifetime in seconds of the access token.
+          format: int64
+        refresh_token:
+          type: string
+          description: >-
+            The refresh token, which can be used to obtain new access tokens
+            using the same authorization grant.
+        refresh_expires_in:
+          type: integer
+          description: The lifetime in seconds of the access token.
+          format: int64
+        scope:
+          type: string
+          description: The scope of the access token.

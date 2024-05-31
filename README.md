@@ -1,5 +1,5 @@
 # Dunktomic
-[![API Doc](https://img.shields.io/badge/documentation-Bump.sh-blue)](https://bump.sh/luisegui/doc/dunktomic)
+[![API Doc](https://img.shields.io/badge/API%20Doc-Bump.sh-blue)](https://bump.sh/luisegui/doc/dunktomic)
 
 <p align="center">
 <img

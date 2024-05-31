@@ -22,7 +22,7 @@ jobs:
         with:
           doc: BUMP_SH_DOCUMENTATION_ID
           token: BUMP_SH_SECRET_TOKEN
-          file: doc/api-documentation.yml
+          file: backend/code/api/rest/resources/openapi.yaml
   api-diff:
     if: ${{ github.event_name == 'pull_request' }}
     name: Check API diff on Bump.sh

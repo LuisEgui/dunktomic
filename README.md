@@ -1,4 +1,6 @@
 # Dunktomic
+[![API Doc](https://img.shields.io/badge/documentation-Bump.sh-blue)](https://bump.sh/luisegui/doc/dunktomic)
+
 <p align="center">
 <img
     style="display: block;

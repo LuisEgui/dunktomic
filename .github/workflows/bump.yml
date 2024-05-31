@@ -15,6 +15,6 @@ jobs:
       - name: Deploy API documentation
         uses: bump-sh/github-action@v1
         with:
-          doc: <BUMP_DOC_ID>
+          doc: ${{secrets.BUMP_DOC_ID}}
           token: ${{secrets.BUMP_TOKEN}}
           file: backend/code/api/rest/src/main/resources/openapi.yaml

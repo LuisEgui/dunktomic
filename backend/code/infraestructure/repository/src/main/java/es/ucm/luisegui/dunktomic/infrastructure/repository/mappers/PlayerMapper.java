@@ -5,6 +5,7 @@ import es.ucm.luisegui.dunktomic.domain.valueobjects.CourtPositions;
 import es.ucm.luisegui.dunktomic.domain.valueobjects.EntityId;
 import es.ucm.luisegui.dunktomic.infrastructure.database.models.PlayerEntity;
 import lombok.Data;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,9 +19,9 @@ public class PlayerMapper
         player.setEmail(playerEntity.getEmail());
         player.setName(playerEntity.getName());
         player.setImage(new ImageMapper().toEntity(playerEntity.getImage()));
-        Set<CourtPositions> courtPositions = playerEntity.getCourtPositions().stream()
-                .map(CourtPositions::fromValue)
-                .collect(java.util.stream.Collectors.toSet());
+        Set<CourtPositions> courtPositions = new HashSet<>();
+        for (String position : playerEntity.getCourtPositions())
+            courtPositions.add(CourtPositions.valueOf(position));
         player.setCourtPositions(courtPositions);
         player.setLevel(playerEntity.getLevel());
         return player;

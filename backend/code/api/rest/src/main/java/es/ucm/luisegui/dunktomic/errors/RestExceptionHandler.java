@@ -4,6 +4,7 @@ import es.ucm.luisegui.dunktomic.domain.exceptions.ClubNotFoundException;
 import es.ucm.luisegui.dunktomic.domain.exceptions.DomainException;
 import es.ucm.luisegui.dunktomic.domain.exceptions.EntityNotFoundException;
 import es.ucm.luisegui.dunktomic.domain.exceptions.PlayerAlreadyExistsException;
+import es.ucm.luisegui.dunktomic.domain.exceptions.UnauthorizedException;
 import es.ucm.luisegui.dunktomic.rest.dtos.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestExceptionHandler extends ResponseEntityExceptionHandler
+{
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Error> handle(UnauthorizedException ex) {
+        return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(RestError.UNAUTHORIZED.error(ex.getCode(), ex.getDescription()));
+    }
 
     @ExceptionHandler(ClubNotFoundException.class)
     public ResponseEntity<Error> handle(ClubNotFoundException ex) {

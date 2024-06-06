@@ -1,6 +1,7 @@
 package es.ucm.luisegui.dunktomic.config;
 
 import es.ucm.luisegui.dunktomic.infrastructure.keycloakclient.ApiClient;
+import es.ucm.luisegui.dunktomic.infrastructure.keycloakclient.api.AuthApi;
 import es.ucm.luisegui.dunktomic.infrastructure.keycloakclient.api.UsersApi;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class KeycloakWebClientConfig
 {
-
     @Bean("keycloakApiClient")
     public ApiClient apiClient(WebClient webClient) {
         return new ApiClient(webClient);
@@ -31,6 +31,11 @@ public class KeycloakWebClientConfig
     @Bean("usersApi")
     public UsersApi usersApi(@Qualifier("keycloakApiClient") ApiClient apiClient) {
         return new UsersApi(apiClient);
+    }
+
+    @Bean("authApi")
+    public AuthApi authApi(@Qualifier("keycloakApiClient") ApiClient apiClient) {
+        return new AuthApi(apiClient);
     }
 
     @Value("${keycloak.auth-server-url}")

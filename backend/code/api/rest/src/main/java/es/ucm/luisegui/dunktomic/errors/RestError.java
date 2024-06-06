@@ -81,4 +81,16 @@ public interface RestError {
             return "Internal server error";
         }
     };
+
+    RestError UNAUTHORIZED = new RestError() {
+        @Override
+        public String getCode() {
+            return "UNAUTHORIZED";
+        }
+
+        @Override
+        public String getDescription() {
+            return "Unauthorized";
+        }
+    };
 }

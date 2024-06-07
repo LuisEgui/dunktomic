@@ -45,4 +45,8 @@ public class AuthRepositoryImpl implements AuthRepository
             return Optional.empty();
         }
     }
+
+    public void revokeAccessToken(String refreshToken) {
+        authApi.logout(REALM, CLIENT_ID, CLIENT_SECRET, refreshToken).block();
+    }
 }

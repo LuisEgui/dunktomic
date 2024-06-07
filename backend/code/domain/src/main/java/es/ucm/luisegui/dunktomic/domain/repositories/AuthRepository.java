@@ -8,4 +8,6 @@ public interface AuthRepository
     Optional<Token> grantAccessToken(String email, String password);
 
     Optional<Token> refreshAccessToken(String refreshToken);
+
+    void revokeAccessToken(String refreshToken);
 }

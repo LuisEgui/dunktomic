@@ -1,6 +1,7 @@
 package es.ucm.luisegui.dunktomic.controllers;
 
 import es.ucm.luisegui.dunktomic.application.dtos.PasswordCredentialsDto;
+import es.ucm.luisegui.dunktomic.application.usecases.LogoutUseCase;
 import es.ucm.luisegui.dunktomic.application.usecases.RefreshAccessTokenUseCase;
 import es.ucm.luisegui.dunktomic.application.usecases.RetriveAccessTokenUseCase;
 import es.ucm.luisegui.dunktomic.dtos.TokenDto;
@@ -15,10 +16,12 @@ public class AuthController implements AuthApi
 {
     private final RetriveAccessTokenUseCase retriveAccessTokenUseCase;
     private final RefreshAccessTokenUseCase refreshAccessTokenUseCase;
+    private final LogoutUseCase logoutUseCase;
 
-    public AuthController(RetriveAccessTokenUseCase retriveAccessTokenUseCase, RefreshAccessTokenUseCase refreshAccessTokenUseCase) {
+    public AuthController(RetriveAccessTokenUseCase retriveAccessTokenUseCase, RefreshAccessTokenUseCase refreshAccessTokenUseCase, LogoutUseCase logoutUseCase) {
         this.retriveAccessTokenUseCase = retriveAccessTokenUseCase;
         this.refreshAccessTokenUseCase = refreshAccessTokenUseCase;
+        this.logoutUseCase = logoutUseCase;
     }
 
     @Override
@@ -33,5 +36,11 @@ public class AuthController implements AuthApi
         String refreshToken = exchangeTokenRequest.getRefreshToken();
         es.ucm.luisegui.dunktomic.domain.entities.Token token = refreshAccessTokenUseCase.execute(refreshToken);
         return ResponseEntity.ok().body(TokenDto.toModel(token));
+    }
+
+    @Override
+    public ResponseEntity<Void> postAuthLogout(String refreshToken) {
+        logoutUseCase.execute(refreshToken);
+        return ResponseEntity.ok().build();
     }
 }

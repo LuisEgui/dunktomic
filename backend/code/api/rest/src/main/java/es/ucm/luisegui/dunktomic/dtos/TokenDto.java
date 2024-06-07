@@ -10,7 +10,8 @@ public class TokenDto
                 .accessToken(token.getAccessToken())
                 .tokenType(token.getTokenType())
                 .expiresIn(token.getExpiresIn())
-                .refreshToken(token.getRefreshToken()) :
+                .refreshToken(token.getRefreshToken())
+                .refreshExpiresIn(token.getRefreshExpiresIn()):
                 // TODO: Remove scope out of Token response
             null;
     }

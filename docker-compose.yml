@@ -10,7 +10,7 @@ services:
     expose:
       - 3306
     ports:
-      - "3305:3306"
+      - "3306:3306"
     healthcheck:
       test: mysql --user=root --password=$$MYSQL_ROOT_PASSWORD --silent --execute "use dunktomic_db"
       interval: 15s
@@ -26,4 +26,4 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=change_me
     ports:
-      - "8081:8080"
+      - "8080:8080"

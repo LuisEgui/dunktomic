@@ -16,6 +16,8 @@ wait_for_port() {
 # Esperar a que Keycloak inicie en el puerto 8080
 wait_for_port localhost 8080
 
+/opt/keycloak/bin/kcadm.sh help config
+
 # Autenticar como administrador
 /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user $KEYCLOAK_ADMIN --password $KEYCLOAK_ADMIN_PASSWORD
 
@@ -127,6 +129,10 @@ CLIENT_ID=$(/opt/keycloak/bin/kcadm.sh get clients -r $REALM | grep -A 10 -B 10 
 
 # Actualizar el cliente con la configuración especificada
 /opt/keycloak/bin/kcadm.sh update clients/$CLIENT_ID -r $REALM -f /tmp/client-config.json
+
+# Logout (eliminar la configuración de credenciales)
+#/opt/keycloak/bin/kcadm.sh config delete
+#rm ~/.keycloak/kcadm.config
 
 # Mantener el contenedor en ejecución
 tail -f /dev/null

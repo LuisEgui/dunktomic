@@ -4,7 +4,7 @@ info:
   title: Dunktomic
   description: 'Allows you to consult games, clubs, courts, players information'
 servers:
-  - url: 'http://localhost:8085'
+  - url: 'http://localhost:8081'
     description: ''
 paths:
   /auth:
@@ -45,7 +45,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   /auth/token:
     post:
@@ -68,7 +68,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedError'
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   /auth/logout:
     post:
@@ -94,7 +94,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   /clubs:
     get:
@@ -148,7 +148,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   '/clubs/{id}':
     get:
@@ -212,7 +212,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   '/clubs/{id}/courts/slots':
     get:
@@ -279,7 +279,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   /players:
     get:
@@ -308,7 +308,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
     post:
       tags:
@@ -331,7 +331,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   '/players/{id}':
     get:
@@ -362,7 +362,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
     delete:
       tags:
@@ -388,7 +388,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   '/players/{id}/followers':
     get:
@@ -418,7 +418,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   /games:
     post:
@@ -442,7 +442,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
     get:
       tags:
@@ -478,7 +478,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   '/games/{id}':
     get:
@@ -510,7 +510,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   '/games/{id}/join':
     post:
@@ -539,7 +539,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
   '/games/{id}/leave':
     post:
@@ -569,7 +569,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       security: []
       servers:
-        - url: 'http://localhost:8085'
+        - url: 'http://localhost:8081'
           description: ''
 tags:
   - name: Auth

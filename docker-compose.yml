@@ -16,3 +16,14 @@ services:
       interval: 15s
       timeout: 10s
       retries: 10
+
+  keycloak:
+    build:
+      context: ./
+      dockerfile: keycloak/Dockerfile
+    container_name: dunktomic_keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=change_me
+    ports:
+      - "8081:8080"

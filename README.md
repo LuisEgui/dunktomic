@@ -34,6 +34,17 @@ Se desea utilizar el siguiente stack tecnológico:
 - Docker
 - Github Actions
 
+## Despliegue
+
+### Requisitos
+Para el despliegue es necesario tener docker instalado.
+
+Una vez instalado, se debe ejecutar sobre el directorio raiz del proyecto:
+
+```bash
+docker compose -f docker-compose up -d
+```
+
 ## Disciplina de Requisitos
 
 Los diagramas han sido desarrollados usando [UMLet](https://www.umlet.com/), una herramienta UML open-source, y se pueden acceder importando los archivos <em>*.uxf</em>.
@@ -49,16 +60,3 @@ Como apoyo en el diagramado, se ha utilizado [Excalidraw](https://excalidraw.com
 ### Casos de Uso
 ![Casos de Uso](./docs/requirements_discipline/useCases.png)
 
-### Análisis de Casos de Uso
-TODO.
-### Priorización de los Casos de Uso
-TODO.
-### Prototipos de la UI
-TODO.
-
-## Disciplina de Análisis y Diseño
-
-### Análisis de la Arquitectura
-TODO.
-### Disciplina de Pruebas
-TODO.

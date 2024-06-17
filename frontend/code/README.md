@@ -68,3 +68,8 @@ module.exports = {
 ```sh
 npm install @heroicons/vue
 ```
+
+### Vue-router install
+```sh
+npm install vue-router@4
+```

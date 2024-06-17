@@ -1,10 +1,9 @@
 <script setup>
-
+import { RouterView } from 'vue-router'
+import BaseToast from '@/components/BaseToast.vue'
 </script>
 
 <template>
-  <main>
-    <h1>Dunktomic</h1>
-  </main>
+  <BaseToast />
+  <RouterView />
 </template>
-

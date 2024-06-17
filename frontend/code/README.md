@@ -55,7 +55,6 @@ npm i -D daisyui@latest
 Add daisyUI to tailwind.config.js:
 
 ```sh
-
 module.exports = {
   //...
   plugins: [
@@ -64,3 +63,8 @@ module.exports = {
 }
 ```
 
+### Hero Icons install
+
+```sh
+npm install @heroicons/vue
+```

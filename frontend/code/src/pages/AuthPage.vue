@@ -1,15 +1,27 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { register } from '@/services/api/players'
 
 const registerMode = ref(false)
 const formData = ref({})
 const position_on_court = ref('')
 
+const handleAuth = async (values) => {
+    console.log(values)
+    try {
+        const user = registerMode ? await register({...values}) : await register({...values})
+        router.push('/')
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 </script>
 
 <template>
-    <div class="flex justify-center items-center h-screen">
-        <form class="card-bordered w-full max-w-md p-6 space-y-4" @submit="onSubmit">
+    <section class="flex justify-center items-center h-screen">
+        <form class="card-bordered w-full max-w-md p-6 space-y-4">
             <h2 v-if="!registerMode" class="card text-2xl font-bold">Iniciar sesion</h2>
             <h2 v-else class="card text-2xl font-bold">Registro</h2>
             <p v-if="!registerMode" class="font-sans">Ingresa tu correo electrónico y contraseña para acceder a tu cuenta.</p>
@@ -48,19 +60,19 @@ const position_on_court = ref('')
                     <span @click="registerMode = true" class="font-bold underline cursor-pointer">Regístrate</span>
                 </p>
                 <div class="card-actions !mt-5">
-                    <button v-if="!registerMode" type="submit" class="btn !btn-wide btn-success ">
+                    <button v-if="!registerMode" type="submit" @click="handleAuth" class="btn !btn-wide btn-success ">
                         Iniciar sesión
                     </button>
                     <div v-else class="justify-between space-x-28">
                         <button @click="registerMode = false" class="btn btn-neutral">
                             Cancelar
                         </button>
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" @click="handleAuth" class="btn btn-success">
                             Registrarse
                         </button>
                     </div>
                 </div>
             </div>
         </form>
-    </div>
+    </section>
 </template>

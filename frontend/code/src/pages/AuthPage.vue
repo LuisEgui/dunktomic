@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 
 const registerMode = ref(false)
+const formData = ref({})
+const position_on_court = ref('')
 
 </script>
 
@@ -17,28 +19,28 @@ const registerMode = ref(false)
                 <div class="label">
                     <span class="label-text">Correo electrónico</span>
                 </div>
-                <input type="email" placeholder="ejemplo@dominio.com" class="input input-bordered w-full max-w-xs" />
+                <input v-model="formData.email" type="email" placeholder="ejemplo@dominio.com" class="input input-bordered w-full max-w-xs" />
                 
                 <div v-if="registerMode" class="label">
                     <span class="label-text">Nombre de usuario</span>
                 </div>
-                <input v-if="registerMode" type="text" placeholder="Ingresa tu nombre" class="input input-bordered w-full max-w-xs" />
+                <input v-if="registerMode" v-model="formData.name" type="text" placeholder="Ingresa tu nombre" class="input input-bordered w-full max-w-xs" />
 
                 <div class="label">
                     <span class="label-text">Contraseña</span>
                 </div>
-                <input type="password" placeholder="******" class="input input-bordered w-full max-w-xs" />
+                <input v-model="formData.password" type="password" placeholder="******" class="input input-bordered w-full max-w-xs" />
 
                 <div v-if="registerMode" class="label">
                     <span class="label-text">Posicion en pista</span>
                 </div>
-                <select v-if="registerMode" class="select select-bordered w-full max-w-xs">
-                    <option disabled selected>Selecciona tu posicion</option>
-                    <option>Point Guard</option>
-                    <option>Shooting Guard</option>
-                    <option>Small Forward</option>
-                    <option>Power Forward</option>
-                    <option>Center</option>
+                <select v-if="registerMode" v-model="position_on_court" class="select select-bordered w-full max-w-xs">
+                    <option disabled selected value="">Selecciona tu posicion</option>
+                    <option value="PG">Point Guard</option>
+                    <option value="SG">Shooting Guard</option>
+                    <option value="SF">Small Forward</option>
+                    <option value="PF">Power Forward</option>
+                    <option value="C">Center</option>
                 </select>
                 
                 <p v-if="!registerMode">

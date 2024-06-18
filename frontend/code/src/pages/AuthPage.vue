@@ -45,10 +45,10 @@ const position_on_court = ref('')
                 
                 <p v-if="!registerMode">
                     ¿No tienes una cuenta todavía? 
-                    <span @click="registerMode = true" class="font-bold underline">Regístrate</span>
+                    <span @click="registerMode = true" class="font-bold underline cursor-pointer">Regístrate</span>
                 </p>
                 <div class="card-actions !mt-5">
-                    <button v-if="!registerMode" type="submit" class="btn btn-wide btn-success ">
+                    <button v-if="!registerMode" type="submit" class="btn !btn-wide btn-success ">
                         Iniciar sesión
                     </button>
                     <div v-else class="justify-between space-x-28">

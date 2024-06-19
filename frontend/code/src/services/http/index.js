@@ -12,5 +12,3 @@ export const http = () => {
       timeout: 10000,
     });
   };
-
-http().get('/actuator/health')

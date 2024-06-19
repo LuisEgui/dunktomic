@@ -2,7 +2,10 @@
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { register } from '@/services/api/players'
+import useUser from '@/composables/useUser'
+import useToast from '@/composables/useToast'
 
+const router = useRouter()
 const registerMode = ref(false)
 const formData = ref({
     email: '',
@@ -10,13 +13,26 @@ const formData = ref({
     password: ''
 })
 const position_on_court = ref('')
+const { showToast } = useToast()
+const { setUser } = useUser()
 
 const handleAuth = async (event) => {
     event.preventDefault()
     try {
-        const user = await register({ ...formData.value, positions_on_court: [position_on_court.value] })
-        router.push('/')
+        if (registerMode.value) {
+            const response = await register({ ...formData.value, positions_on_court: [position_on_court.value] })
+            if (response.status === 202) {
+                showToast({ message: `Te has registrado correctamente`, error: false })
+                setUser(response.id)
+                registerMode.value = false
+            }
+            router.push('/auth')
+        } else {
+            const user = await login({...formData.value })
+            router.push('/')
+        }
     } catch (error) {
+        showToast({ message: error.response.data.description, error: true })
         console.error(error)
     }
 }

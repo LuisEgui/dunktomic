@@ -1,5 +1,4 @@
 import { http } from "../http";
-import axios from "axios";
 import { LOCAL_STORAGE_KEYS, localStorageService } from "../local-storage";
 
 export const register = async ({ name, email, password, positions_on_court }) => {

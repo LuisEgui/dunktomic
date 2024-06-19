@@ -1,9 +1,10 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { register } from '@/services/api/players'
 import useUser from '@/composables/useUser'
 import useToast from '@/composables/useToast'
+import { login } from '@/services/api/auth'
 
 const router = useRouter()
 const registerMode = ref(false)
@@ -28,7 +29,9 @@ const handleAuth = async (event) => {
             }
             router.push('/auth')
         } else {
-            const user = await login({...formData.value })
+            const response = await login({...formData.value })
+            if (response.status === 200)
+                showToast({ message: `Has iniciado sesion correctamente`, error: false })
             router.push('/')
         }
     } catch (error) {

@@ -45,6 +45,22 @@ Una vez instalado, se debe ejecutar sobre el directorio raiz del proyecto:
 docker compose -f docker-compose up -d
 ```
 
+A falta de incluir el servicio del frontend en el docker compose, se debe arrancar individualmente de la siguiente manera:
+
+```bash
+cd frontend/code
+npm install
+npm run dev
+```
+
+Podremos acceder desde el navegador a la ruta*:
+
+```
+http://localhost:5173/auth
+```
+
+*: en futuras iteraciones, el acceso seria a ```http://localhost:5173/```
+
 ## Disciplina de Requisitos
 
 Los diagramas han sido desarrollados usando [UMLet](https://www.umlet.com/), una herramienta UML open-source, y se pueden acceder importando los archivos <em>*.uxf</em>.

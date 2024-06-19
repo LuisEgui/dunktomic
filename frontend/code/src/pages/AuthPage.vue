@@ -4,13 +4,17 @@ import { useRouter } from 'vue-router'
 import { register } from '@/services/api/players'
 
 const registerMode = ref(false)
-const formData = ref({})
+const formData = ref({
+    email: '',
+    name: '',
+    password: ''
+})
 const position_on_court = ref('')
 
-const handleAuth = async (values) => {
-    console.log(values)
+const handleAuth = async (event) => {
+    event.preventDefault()
     try {
-        const user = registerMode ? await register({...values}) : await register({...values})
+        const user = await register({ ...formData.value, positions_on_court: [position_on_court.value] })
         router.push('/')
     } catch (error) {
         console.error(error)
